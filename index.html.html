@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رسائل وطنية بلغة الرياضيات - ثانوية سارة آل الشيخ</title>
+    <style>
+        :root {
+            --primary-color: #2c4a3e;
+            --accent-gold: #c5a880;
+            --bg-color: #fcf9f2;
+            --envelope-bg: #fffbf0;
+            --border-color: #e6dec9;
+            --red-seal: #b32424;
+        }
+
+        body {
+            font-family: 'Cairo', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            direction: rtl;
+        }
+
+        header {
+            background-color: #fff;
+            border-bottom: 2px solid var(--border-color);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .header-title {
+            font-size: 14px;
+            color: #555;
+            background: #f4efe6;
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .user-input-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: inline-flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 40px;
+            border: 1px solid var(--border-color);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .user-input-box input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .user-input-box input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .user-input-box span {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .envelopes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding-bottom: 50px;
+        }
+
+        .envelope-card {
+            background: var(--envelope-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .envelope-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+        }
+
+        .envelope-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .envelope-body {
+            background: #fff;
+            border: 1px dashed var(--border-color);
+            height: 90px;
+            border-radius: 8px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 45px;
+            background: #f7edd0;
+            border-bottom: 2px solid #e0d2b4;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+        }
+
+        .seal {
+            width: 30px;
+            height: 30px;
+            background-color: var(--red-seal);
+            border-radius: 50%;
+            position: absolute;
+            top: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 2;
+        }
+
+        .open-btn {
+            margin-top: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+            width: 100%;
+        }
+
+        .open-btn:hover {
+            background-color: #1e332a;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+            border-top: 5px solid var(--primary-color);
+        }
+
+        .modal-header {
+            font-size: 0.9rem;
+            color: var(--red-seal);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .modal-body {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #2c3e50;
+            margin: 20px 0;
+            padding: 15px;
+            background: #fcf9f2;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .close-modal-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .close-modal-btn:hover {
+            background-color: #1e332a;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">🏫 ثانوية سارة آل الشيخ</div>
+        <div class="header-title">👩‍🏫 إعداد المعلمة: حسناء الغامدي</div>
+    </header>
+
+    <div class="main-container">
+        <h1>رسائل وطنية بلغة الرياضيات</h1>
+        <p class="subtitle">انقر على أي ظرف أدناه لفتح الرسالة وقراءتها تحت شعار: <b>«بالقوا في حب وطنكم»</b></p>
+
+        <div class="user-input-box">
+            <input type="text" id="studentName" placeholder="اكتبي اسمك هنا...">
+            <span>:طالبة تقدمها</span>
+        </div>
+
+        <div class="envelopes-grid" id="envelopesGrid">
+            <!-- سيتم توليد الأظرف برمجياً -->
+        </div>
+    </div>
+
+    <!-- نافذة عرض الرسالة -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-header" id="modalTitle">الظرف الفاخر #01</div>
+            <div style="font-size: 0.85rem; color: #888;" id="modalSubtitle">رسالة وفاء وطنية تقدمها الطالبة: زائرة</div>
+            <div class="modal-body" id="modalText">
+                <!-- نص الرسالة -->
+            </div>
+            <button class="close-modal-btn" onclick="closeModal()">إغلاق الظرف</button>
+        </div>
+    </div>
+
+    <script>
+        const messages = [
+            "لو تؤمرينا الرمل عنك نلمه، ولو تعطشينا الدم ليكي منا مسكوب، إنتي الصدوق الباقية المهمة وإنتي الحبيب وكلنا قلبه محبوب.",
+            "تعاونُوا لهذا الوطن الغالي يقترب من الما لانهائية (∞)، وكلما زاد الزمن (t → ∞) زاد هذا العشق رسوخاً.",
+            "تقاطع القلوب الصادقة دائماً يعطي مجموعة غير خالية (Ø ≠ A ∩ B)، وعنصرهم المشترك الأوحد هو تراب هذا الوطن.",
+            "في هندسة الأرواح، يعتبر الوطن هو المحور الأساسي الذي تدور حوله كل زوايا الانتماء بزاوية قائمة تماماً (90°).",
+            "متتالية التضحيات من أجل الوطن متقاربة نحو قمة المجد وحدها الأعلى هو الشهادة أو العطاء بلا حدود.",
+            "لو قمنا بحساب معدل التغير لكرامة المواطن في ظل هذا الوطن، لوجدناه يساوي اتجاهاً ثابتاً نحو العلياء.",
+            "إن براهين حب الوطن لا تحتاج إلى فرضيات معقدة، فالبيديهات وحدها تكفي لإثبات الولاء المطلق.",
+            "تزايد الإنجازات الوطنية يتبع متسلسلة هندسية أساسها العمل الجاد ونتيجتها الزيادة المطلقة.",
+            "تحت شعار «بالقوا في حب وطنكم»، لنجعل معامل الارتباط بين أرواحنا والوطن يساوي الواحد الصحيح تماماً (r = 1)."
+        ];
+
+        const grid = document.getElementById('envelopesGrid');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalText = document.getElementById('modalText');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalSubtitle = document.getElementById('modalSubtitle');
+        const studentNameInput = document.getElementById('studentName');
+
+        // توليد 9 أظرف افتراضية (يمكن زيادتها)
+        for (let i = 1; i <= 9; i++) {
+            const envelopeNum = i < 10 ? `0${i}` : `${i}`;
+            const msgIndex = (i - 1) % messages.length;
+            
+            const card = document.createElement('div');
+            card.className = 'envelope-card';
+            card.innerHTML = `
+                <div class="envelope-header">
+                    <span>رسالة وطنية</span>
+                    <span>#${envelopeNum}</span>
+                </div>
+                <div class="envelope-body" onclick="openEnvelope(${i}, ${msgIndex})">
+                    <div class="envelope-flap"></div>
+                    <div class="seal">❤</div>
+                </div>
+                <button class="open-btn" onclick="openEnvelope(${i}, ${msgIndex})">انقر لفتح الظرف الفاخر</button>
+            `;
+            grid.appendChild(card);
+        }
+
+        function openEnvelope(envelopeId, msgIndex) {
+            const name = studentNameInput.value.trim() || "طالبة ثانوية سارة آل الشيخ";
+            const envNumStr = envelopeId < 10 ? `0${envelopeId}` : `${envelopeId}`;
+            
+            modalTitle.innerText = `الظرف الفاخر #${envNumStr}`;
+            modalSubtitle.innerText = `رسالة وفاء وطنية تقدمها الطالبة: ${name}`;
+            modalText.innerText = messages[msgIndex];
+            
+            modalOverlay.classList.add('active');
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+        }
+
+        // إغلاق النافذة عند النقر خارجها
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
